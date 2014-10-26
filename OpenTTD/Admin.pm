@@ -514,6 +514,18 @@ sub poll($)
 	}
 
 	my $type = shift;
+
+	if( !exists($openttd->{_freq}{$type}) )
+	{
+		$openttd->debug( 'poll', "unknown type<%d>", $type );
+		return( 0 );
+	}
+	elsif( !FLAG( $openttd->{_freq}{$type}, $FREQUENCY{POLL} ))
+	{
+		$openttd->debug( 'poll', "polling not allowed for type<%d>", $type );
+		return( 0 );
+	}
+
 	my $arg  = shift || 0;
 
 	my $packet = new OpenTTD::Packet( $ADMIN_PACKET{POLL} );
